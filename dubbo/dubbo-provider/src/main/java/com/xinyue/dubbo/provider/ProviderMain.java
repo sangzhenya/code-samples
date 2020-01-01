@@ -1,11 +1,11 @@
 package com.xinyue.dubbo.provider;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class ProviderMain {
-    public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-provider.xml");
-        context.start();
-        System.in.read();
+    public static void main(String[] args) {
+        SpringApplication.run(ProviderMain.class);
     }
 }

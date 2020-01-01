@@ -1,16 +1,11 @@
 package com.xinyue.dubbo.consumer;
 
-import com.xinyue.dubbo.api.service.ArticleService;
-import com.xinyue.dubbo.core.model.Article;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class ConsumerMain {
-    public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-consumer.xml");
-        context.start();
-        ArticleService articleService = context.getBean(ArticleService.class);
-        Article article = articleService.getArticleById(1);
-        System.out.println(article);
-        System.in.read();
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerMain.class);
     }
 }

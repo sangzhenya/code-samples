@@ -1,0 +1,17 @@
+##端口号
+server:
+  port: 8080
+dubbo:
+  application:
+    name: dubbo-provider
+  registry:
+    address: zookeeper://192.168.0.111:2181
+  protocol:
+    name: dubbo
+    port: 20080
+  scan:
+    base-packages: com.xinyue.dubbo.provider.service
+  metadata-report:
+    address: zookeeper://192.168.0.111:2181
+  provider:
+    group: blog
