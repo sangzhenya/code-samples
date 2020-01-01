@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="demo-provider"/>
+
+    <dubbo:registry protocol="zookeeper" address="192.168.0.111:2181" />
+
+    <dubbo:config-center address="zookeeper://192.168.0.111:2181" />
+
+    <dubbo:metadata-report id="eArticleServiceReport" address="zookeeper://192.168.0.111:2181" />
+
+    <dubbo:protocol name="dubbo" port="20081"/>
+
+    <!-- 和本地bean一样实现服务 -->
+    <bean id="articleService" class="com.xinyue.dubbo.provider.service.ArticleServiceImpl" />
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service id="eArticleService" interface="com.xinyue.dubbo.api.service.ArticleService" ref="articleService" />
+
+</beans>
