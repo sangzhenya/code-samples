@@ -6,6 +6,7 @@ dubbo:
     name: dubbo-provider
   registry:
     address: zookeeper://192.168.0.111:2181
+    dynamic: false
   protocol:
     name: dubbo
     port: 20080
@@ -15,3 +16,5 @@ dubbo:
     address: zookeeper://192.168.0.111:2181
   provider:
     group: blog
+  consumer:
+    check: false
