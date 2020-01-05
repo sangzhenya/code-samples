@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service
 public class CallbackServiceImpl implements CallbackService {
     private final Map<String, CallbackListener> listeners = new ConcurrentHashMap<>();
 

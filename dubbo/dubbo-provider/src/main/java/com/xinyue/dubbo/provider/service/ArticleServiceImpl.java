@@ -6,7 +6,7 @@ import org.apache.dubbo.config.annotation.Service;
 
 import java.time.LocalDateTime;
 
-@Service(delay = 1000)
+@Service
 public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getArticleById(Integer id) {

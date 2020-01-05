@@ -15,19 +15,19 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class BlogServiceImpl{
-    @Reference(stub = "com.xinyue.dubbo.consumer.controller.ArticleServiceStub")
+    @Reference
     ArticleService articleService;
-    @Reference(methods = {@Method(name = "addListener", arguments = {@Argument(index = 1, callback = true)})})
+    /*@Reference(methods = {@Method(name = "addListener", arguments = {@Argument(index = 1, callback = true)})})
     CallbackService callbackService;
     @Reference(timeout = 1000)
-    AsyncService asyncService;
+    AsyncService asyncService;*/
 
     @GetMapping("/")
     public Article hello() {
         return articleService.getArticleById(1);
     }
 
-    @GetMapping("/callback")
+    /*@GetMapping("/callback")
     public String callback() {
         callbackService.addListener("foo.bar", msg -> System.out.println("callback1:" + msg));
         return "success";
@@ -48,6 +48,6 @@ public class BlogServiceImpl{
         // 早于结果输出
         System.out.println("Executed before response return.");
         return "Success";
-    }
+    }*/
 }
 
