@@ -1,4 +1,4 @@
-package com.xinyue.producer.service;
+package com.xinyue.api;
 
 import com.xinyue.model.User;
 

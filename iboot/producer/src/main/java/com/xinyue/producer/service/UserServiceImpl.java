@@ -1,10 +1,10 @@
 package com.xinyue.producer.service;
 
+import com.xinyue.api.UserService;
 import com.xinyue.model.User;
 import com.xinyue.producer.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {

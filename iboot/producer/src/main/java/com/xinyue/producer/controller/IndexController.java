@@ -1,7 +1,7 @@
 package com.xinyue.producer.controller;
 
+import com.xinyue.api.UserService;
 import com.xinyue.model.User;
-import com.xinyue.producer.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +14,12 @@ public class IndexController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/user")
     @ResponseBody
-    public String index() {
+    public User index() {
         User sUser = userService.getById(1);
         System.out.println(sUser);
-        return sUser.toString();
+        return sUser;
     }
 
 
