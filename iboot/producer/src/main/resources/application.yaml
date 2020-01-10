@@ -1,3 +1,4 @@
+
 server:
   port: 8001
 
@@ -16,3 +17,20 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: xinyue
     password: 123456
+  application:
+    name: iboot-provider
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: iboot-provider8001
+    prefer-ip-address: true
+
+info:
+  app.name: iboot-provider
+  company.name: com.xinyue
+  build.artifactId: @project.version@
+  build.version: @project.version@
