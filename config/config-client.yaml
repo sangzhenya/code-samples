@@ -16,8 +16,6 @@ server:
   port: 8005
 spring:
   profiles: dev
-  application:
-    name: config-dev
 eureka:
   client:
     service-url:
