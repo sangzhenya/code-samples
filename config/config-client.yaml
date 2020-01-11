@@ -16,10 +16,3 @@ server:
   port: 8005
 spring:
   profiles: dev
-eureka:
-  client:
-    service-url:
-      defaultZone: http://eureka000:7001/eureka/
-  instance:
-    instance-id: iboot-config-client
-    prefer-ip-address: true
