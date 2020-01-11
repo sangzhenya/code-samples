@@ -26,6 +26,13 @@ public class IndexController {
         this.client = client;
     }
 
+    @ResponseBody
+    @GetMapping("/")
+    public String index() {
+        return "Hello World";
+    }
+
+
     @HystrixCommand(fallbackMethod = "fallbackMethod")
     @GetMapping("/user/{id}")
     @ResponseBody

@@ -1,0 +1,27 @@
+server:
+  port: 9001
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka000:7001/eureka/
+  instance:
+    instance-id: zuulgateway
+    prefer-ip-address: true
+
+info:
+  app.name: iboot-consumer
+  company.name: com.xinyue
+  build.artifactId: @project.version@
+  build.version: @project.version@
+spring:
+  application:
+    name: iboot-zuul
+
+zuul:
+  routes:
+    provider.serviceId: iboot-provider
+    provider.path: /provider/**
+  prefix: /xinyue
+  ignored-services: "*"
