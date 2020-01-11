@@ -27,6 +27,7 @@ public class IndexController {
     @GetMapping("/user")
     @ResponseBody
     public User index() {
+        log.info("Get from 001 provider");
         User sUser = userService.getById(1);
         System.out.println(sUser);
         return sUser;
@@ -36,7 +37,6 @@ public class IndexController {
     @GetMapping("/create")
     @ResponseBody
     public String create() {
-        log.info("Get from 002 provider.");
         User user = new User();
         user.setName("LinXinyue");
         user.setPassword("123456");

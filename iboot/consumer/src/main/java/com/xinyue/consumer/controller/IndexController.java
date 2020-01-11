@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class IndexController {
-    private static final String REST_URL = "http://localhost:8001";
+    private static final String REST_URL = "http://IBOOT-PROVIDER";
 
     @Autowired
     private RestTemplate restTemplate;
