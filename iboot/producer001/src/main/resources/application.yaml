@@ -24,7 +24,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka000:7001/eureka/,http://eureka001:7002/eureka/,http://eureka000:7001/eureka/
+      defaultZone: http://eureka000:7001/eureka/
   instance:
     instance-id: iboot-provider8002
     prefer-ip-address: true

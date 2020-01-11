@@ -5,7 +5,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka000:7001/eureka/,http://eureka001:7002/eureka/,http://eureka000:7001/eureka/
+      defaultZone: http://eureka000:7001/eureka/
     register-with-eureka: false
   instance:
     instance-id: iboot-consumer8001
