@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 
 
 eureka:
@@ -8,11 +8,11 @@ eureka:
       defaultZone: http://eureka000:7001/eureka/
     register-with-eureka: false
   instance:
-    instance-id: iboot-consumer8080
+    instance-id: iboot-consumer-hystrix
     prefer-ip-address: true
 
 info:
-  app.name: iboot-consumer
+  app.name: iboot-consumer-hystrix
   company.name: com.xinyue
   build.artifactId: @project.version@
   build.version: @project.version@

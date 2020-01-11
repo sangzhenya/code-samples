@@ -1,6 +1,6 @@
 package com.xinyue.producer.controller;
 
-import com.xinyue.api.UserService;
+import com.xinyue.api.service.UserService;
 import com.xinyue.model.User;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -29,6 +29,9 @@ public class IndexController {
     @ResponseBody
     public User index(@PathVariable("id") Integer id) {
         User sUser = userService.getById(id);
+        if (sUser == null) {
+            throw new RuntimeException("Cannot find user by id:" + id);
+        }
         System.out.println(sUser);
         return sUser;
     }

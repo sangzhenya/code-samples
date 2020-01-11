@@ -34,3 +34,9 @@ info:
   company.name: com.xinyue
   build.artifactId: @project.version@
   build.version: @project.version@
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

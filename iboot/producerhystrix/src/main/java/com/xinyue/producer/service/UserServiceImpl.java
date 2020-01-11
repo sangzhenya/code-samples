@@ -1,7 +1,6 @@
 package com.xinyue.producer.service;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.xinyue.api.UserService;
+import com.xinyue.api.service.UserService;
 import com.xinyue.model.User;
 import com.xinyue.producer.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

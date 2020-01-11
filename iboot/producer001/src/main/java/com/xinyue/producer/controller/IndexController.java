@@ -1,6 +1,6 @@
 package com.xinyue.producer.controller;
 
-import com.xinyue.api.UserService;
+import com.xinyue.api.service.UserService;
 import com.xinyue.model.User;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
