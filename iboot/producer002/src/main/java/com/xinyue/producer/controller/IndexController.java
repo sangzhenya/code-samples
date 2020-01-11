@@ -7,6 +7,7 @@ import org.apache.juli.logging.LogFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,11 +25,11 @@ public class IndexController {
         this.client = client;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/user/{id}")
     @ResponseBody
-    public User index() {
+    public User index(@PathVariable("id") Integer id) {
         log.info("Get from 001 provider");
-        User sUser = userService.getById(1);
+        User sUser = userService.getById(id);
         System.out.println(sUser);
         return sUser;
     }
