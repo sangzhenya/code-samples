@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      name: config-client
+      label: master
+#      profile: dev
+      uri: http://localhost:9002
