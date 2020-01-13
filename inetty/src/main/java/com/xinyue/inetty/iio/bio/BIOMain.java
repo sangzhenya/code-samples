@@ -1,4 +1,4 @@
-package com.xinyue.inetty.iio;
+package com.xinyue.inetty.iio.bio;
 
 import java.io.IOException;
 import java.io.InputStream;
