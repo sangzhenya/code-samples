@@ -20,7 +20,7 @@ public class CopyFileMain {
             byteBuffer.clear();
             int read = readChannel.read(byteBuffer);
             System.out.println("read =" + read);
-            if(read == -1) { //表示读完
+            if(read == -1) {
                 break;
             }
             byteBuffer.flip();
