@@ -23,6 +23,7 @@ public class NIOServerMain {
         // 注册 OP_ACCEPT 事件
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
+        // 注册的 key 的数量
         System.out.println("Register selectionkey count=" + selector.keys().size());
 
 
@@ -33,7 +34,7 @@ public class NIOServerMain {
                 continue;
             }
 
-            // 获取 selectedKeys
+            // 获取 selectedKeys, 关注事件的集合
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             System.out.println("selectionKeys count = " + selectionKeys.size());
 
@@ -50,8 +51,7 @@ public class NIOServerMain {
                     socketChannel.configureBlocking(false);
                     // 注册 OP_READ 事件
                     socketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
-
-                    System.out.println("Client connected，register selectionkey count=" + selector.keys().size()); //2,3,4..
+                    System.out.println("Client connected，register selectionkey count=" + selector.keys().size());
                 }
                 if(key.isReadable()) {
                     // 通过 SelectionKey 获取 Channel
@@ -60,7 +60,7 @@ public class NIOServerMain {
                     ByteBuffer buffer = (ByteBuffer)key.attachment();
                     // 读取数据
                     channel.read(buffer);
-                    System.out.println("from client " + new String(buffer.array()));
+                    System.out.println("From client " + new String(buffer.array()));
                 }
                 // 移除 key 防止重复操作
                 keyIterator.remove();
