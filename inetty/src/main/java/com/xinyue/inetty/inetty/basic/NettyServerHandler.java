@@ -8,6 +8,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
 
+import java.util.concurrent.TimeUnit;
+
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
@@ -23,6 +25,24 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf buf = (ByteBuf) msg;
         System.out.println("Receive::" + buf.toString(CharsetUtil.UTF_8));
         System.out.println("Address::" + channel.remoteAddress());
+
+        ctx.channel().eventLoop().execute(() -> {
+            try {
+                Thread.sleep(10 * 1000);
+                ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        ctx.channel().eventLoop().schedule(() -> {
+            try {
+                Thread.sleep(10 * 1000);
+                ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 20, TimeUnit.SECONDS);
     }
 
     @Override
