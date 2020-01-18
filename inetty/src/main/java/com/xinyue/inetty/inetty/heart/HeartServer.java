@@ -1,21 +1,20 @@
-package com.xinyue.inetty.inetty.chat;
+package com.xinyue.inetty.inetty.heart;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
-public class ChatServer {
-    private int port;
+import java.util.concurrent.TimeUnit;
 
-    public ChatServer(int port) {
-        this.port = port;
-    }
-
-    public void run() {
+public class HeartServer {
+    public static void main(String[] args) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -23,30 +22,22 @@ public class ChatServer {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .handler(new LoggingHandler())
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast("decoder", new StringDecoder());
-                            pipeline.addLast("encoder", new StringEncoder());
-                            pipeline.addLast(new ChartServerHandler());
+                            pipeline.addLast(new IdleStateHandler(60, 60, 60, TimeUnit.SECONDS));
+                            pipeline.addLast(new HeartServerHandler());
                         }
                     });
-
-            System.out.println("Netty server start");
-            ChannelFuture sync = bootstrap.bind(port).sync();
+            ChannelFuture sync = bootstrap.bind(8080).sync();
             sync.channel().closeFuture().sync();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-    }
-
-    public static void main(String[] args) {
-        new ChatServer(8080).run();
     }
 }
