@@ -40,7 +40,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("Read Thread::" + Thread.currentThread().getName());
         ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 1", CharsetUtil.UTF_8));
 
-        group.submit(() -> {
+        /*group.submit(() -> {
             ByteBuf buf = (ByteBuf) msg;
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
@@ -50,7 +50,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("Sync Tread Name::" + Thread.currentThread().getName());
             ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
             return null;
-        });
+        });*/
     }
 
     @Override
