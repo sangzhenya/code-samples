@@ -15,11 +15,17 @@
  */
 package com.xinyue.inetty.source.echo;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
+
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
 
 /**
  * Handler implementation for the echo server.
@@ -27,18 +33,23 @@ import io.netty.util.CharsetUtil;
 @Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
+    static final EventExecutorGroup group = new DefaultEventExecutorGroup(24);
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("Read Thread::" + Thread.currentThread().getName());
         ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 1", CharsetUtil.UTF_8));
-        ctx.channel().eventLoop().execute(() -> {
-            try {
-                Thread.sleep(10 * 1000);
-                System.out.println("Sync Thread::" + Thread.currentThread().getName());
-                ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+        group.submit(() -> {
+            ByteBuf buf = (ByteBuf) msg;
+            byte[] bytes = new byte[buf.readableBytes()];
+            buf.readBytes(bytes);
+            String body = new String(bytes, StandardCharsets.UTF_8);
+            System.out.println("Receive From Client::" + body);
+            Thread.sleep(10 * 1000);
+            System.out.println("Sync Tread Name::" + Thread.currentThread().getName());
+            ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
+            return null;
         });
     }
 
