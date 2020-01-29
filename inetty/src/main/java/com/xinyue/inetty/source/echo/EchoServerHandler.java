@@ -15,9 +15,11 @@
  */
 package com.xinyue.inetty.source.echo;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.CharsetUtil;
 
 /**
  * Handler implementation for the echo server.
@@ -27,7 +29,17 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ctx.write(msg);
+        System.out.println("Read Thread::" + Thread.currentThread().getName());
+        ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 1", CharsetUtil.UTF_8));
+        ctx.channel().eventLoop().execute(() -> {
+            try {
+                Thread.sleep(10 * 1000);
+                System.out.println("Sync Thread::" + Thread.currentThread().getName());
+                ctx.writeAndFlush(Unpooled.copiedBuffer("Hello, client, 2", CharsetUtil.UTF_8));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
