@@ -415,20 +415,224 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public static void main(String[] args) {
-        ListNode node = new ListNode(1);
-        node.next = new ListNode(3);
-        node.next.next = new ListNode(5);
-        node.next.next.next = new ListNode(7);
-        node.next.next.next.next = new ListNode(9);
+    private TreeNode pre = null;
+    private TreeNode header = null;
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        inOrder(pRootOfTree);
+        return header;
+    }
 
-        ListNode node1 = new ListNode(2);
-        node1.next = new ListNode(4);
-        node1.next.next = new ListNode(6);
-        node1.next.next.next = new ListNode(8);
-        node1.next.next.next.next = new ListNode(10);
-        System.out.println(new OfferMain().Merge(node, node1));
-        System.out.println(node);
-        System.out.println(node1);
+    private void inOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+
+        inOrder(node.left);
+        node.left = pre;
+        if (pre != null) {
+            pre.right = node;
+        }
+        pre = node;
+        if (header == null) {
+            header = node;
+        }
+        inOrder(node.right);
+    }
+
+    /**********************************************************************************/
+    private ArrayList<String> sResult = new ArrayList<>();
+
+    public ArrayList<String> Permutation(String str) {
+        if (str.length() == 0) {
+            return sResult;
+        }
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+        backtrackingPermutation(chars, new boolean[chars.length], new StringBuilder());
+        return sResult;
+    }
+
+    private void backtrackingPermutation(char[] chars, boolean[] used, StringBuilder stringBuilder) {
+        if (stringBuilder.length() == chars.length) {
+            sResult.add(stringBuilder.toString());
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (used[i]) {
+                continue;
+            }
+            if (i != 0 && chars[i] == chars[i - 1] && !used[i - 1]) {
+                continue;
+            }
+            used[i] = true;
+            stringBuilder.append(chars[i]);
+            backtrackingPermutation(chars, used, stringBuilder);
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            used[i] = false;
+        }
+    }
+
+    /**********************************************************************************/
+    public int MoreThanHalfNum_Solution(int [] array) {
+        int majority = array[0];
+        for (int i = 0, cnt = 1; i < array.length; i++) {
+            cnt = (array[i] == majority ? cnt + 1 : cnt - 1);
+            if (cnt == 0) {
+                majority = array[i];
+                cnt += 1;
+            }
+        }
+        int cnt = 0;
+        for (int val : array) {
+            if (val == majority) {
+                cnt += 1;
+            }
+        }
+
+        return cnt > array.length / 2 ? majority : 0;
+    }
+
+    /**********************************************************************************/
+    public ArrayList<Integer> GetLeastNumbers_Solution(int[] input, int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (k > input.length || k < 0) {
+            return result;
+        }
+        findKthSmallest(input, k - 1);
+        for (int i = 0; i < k; i++) {
+            result.add(input[i]);
+        }
+        return result;
+    }
+
+    private void findKthSmallest(int[] input, int k) {
+        int l = 0;
+        int h = input.length - 1;
+        while (l < h) {
+            int j = partition(input, l, h);
+            if (j == k) {
+                break;
+            } else if (j > k) {
+                h = j - 1;
+            } else {
+                l = j + 1;
+            }
+        }
+    }
+
+    private int partition(int[] nums, int l, int h) {
+        int p = nums[l];
+        int i = l;
+        int j = h + 1;
+        while (true) {
+            while (i != h && nums[++i] < p) {}
+            while (j != l && nums[--j] > p) {}
+            if (i > j) {
+                break;
+            }
+            swap(nums, i, j);
+        }
+        swap(nums, l, j);
+        return j;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    /**********************************************************************************/
+    public int FindGreatestSumOfSubArray(int[] array) {
+        if (array == null || array.length == 0) {
+            return 0;
+        }
+        int gSum = Integer.MIN_VALUE;
+
+        int sum = 0;
+        for (int num : array) {
+            sum = sum <= 0 ? num : sum + num;
+            gSum = Math.max(gSum, sum);
+        }
+        return gSum;
+    }
+
+    /**********************************************************************************/
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int cnt = 0;
+        for (int i = 1; i <= n; i *= 10) {
+            int a = n / i;
+            int b = n % i;
+            cnt += (a + 8) / 10 * i + (a % 10 == 1 ? b + 1 : 0);
+        }
+        return cnt;
+
+    }
+
+    /**********************************************************************************/
+    public String PrintMinNumber(int [] numbers) {
+        if (numbers == null || numbers.length == 0) {
+            return "";
+        }
+        int length = numbers.length;
+        String[] nums = new String[length];
+        for (int i = 0; i < length; i++) {
+            nums[i] = String.valueOf(numbers[i]);
+        }
+
+        Arrays.sort(nums, (s1, s2) -> (s1 + s2).compareTo(s2 + s1));
+
+        StringBuilder result = new StringBuilder();
+        for (String num : nums) {
+            result.append(num);
+        }
+        return result.toString();
+    }
+
+    /**********************************************************************************/
+    public int GetUglyNumber_Solution(int index) {
+        if (index <= 6) {
+            return index;
+        }
+        int i2 = 0;
+        int i3 = 0;
+        int i5 = 0;
+        int[] dp = new int[index];
+        dp[0] = 1;
+
+        for (int i = 1; i < index; i++) {
+            int next2 = dp[i2] * 2;
+            int next3 = dp[i3] * 3;
+            int next5 = dp[i5] * 5;
+            dp[i] = Math.min(next2, Math.min(next3, next5));
+            if (dp[i] == next2) {
+                i2 += 1;
+            }
+            if (dp[i] == next3) {
+                i3 += 1;
+            }
+            if (dp[i] == next5) {
+                i5 += 1;
+            }
+        }
+        return dp[index - 1];
+    }
+
+    /**********************************************************************************/
+    public int FirstNotRepeatingChar(String str) {
+        int[] cnts = new int[256];
+        for (int i = 0; i < str.length(); i++) {
+            cnts[str.charAt(i)] += 1;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            if (cnts[str.charAt(i)] == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**********************************************************************************/
+    public static void main(String[] args) {
+        System.out.println(new OfferMain().GetUglyNumber_Solution(7));
     }
 }
