@@ -678,7 +678,19 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        ListNode l1 = pHead1, l2 = pHead2;
+        while (l1 != l2) {
+            l1 = (l1 == null) ? pHead2 : l1.next;
+            l2 = (l2 == null) ? pHead1 : l2.next;
+        }
+        return l1;
+    }
+
+    /**********************************************************************************/
     public static void main(String[] args) {
-        System.out.println(new OfferMain().InversePairs(new int[]{1, 2, 3, 4, 5, 6, 7, 0}));
+        ListNode listNode = new ListNode(1);
+        listNode.next = new ListNode(2);
+        System.out.println(new OfferMain().FindFirstCommonNode( listNode, null));
     }
 }
