@@ -6,7 +6,7 @@ public class OfferMain {
 
     private Map<Integer, Integer> indexInMap = new HashMap<>();
 
-    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
+    public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
         for (int i = 0; i < in.length; i++) {
             indexInMap.put(in[i], i);
         }
@@ -26,7 +26,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public int minNumberInRotateArray(int [] array) {
+    public int minNumberInRotateArray(int[] array) {
         if (array.length == 0) {
             return 0;
         }
@@ -132,7 +132,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public void reOrderArray(int [] array) {
+    public void reOrderArray(int[] array) {
         int oddCount = 0;
         for (int num : array) {
             if (num % 2 == 1) {
@@ -152,7 +152,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public ListNode FindKthToTail(ListNode head,int k) {
+    public ListNode FindKthToTail(ListNode head, int k) {
         if (head == null) {
             return null;
         }
@@ -188,7 +188,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public ListNode Merge(ListNode list1,ListNode list2) {
+    public ListNode Merge(ListNode list1, ListNode list2) {
         if (list1 == null) {
             return list2;
         }
@@ -206,7 +206,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+    public boolean HasSubtree(TreeNode root1, TreeNode root2) {
         if (root1 == null || root2 == null) {
             return false;
         }
@@ -244,7 +244,7 @@ public class OfferMain {
 
 
     /**********************************************************************************/
-    public ArrayList<Integer> printMatrix(int [][] matrix) {
+    public ArrayList<Integer> printMatrix(int[][] matrix) {
         ArrayList<Integer> result = new ArrayList<>();
         int c1 = 0;
         int c2 = matrix[0].length - 1;
@@ -299,7 +299,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public boolean IsPopOrder(int [] pushA,int [] popA) {
+    public boolean IsPopOrder(int[] pushA, int[] popA) {
         int n = popA.length;
         Stack<Integer> stack = new Stack<>();
         for (int i = 0, j = 0; i < n; i++) {
@@ -333,7 +333,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public boolean VerifySquenceOfBST(int [] sequence) {
+    public boolean VerifySquenceOfBST(int[] sequence) {
         if (sequence == null || sequence.length == 0) {
             return false;
         }
@@ -361,7 +361,7 @@ public class OfferMain {
     /**********************************************************************************/
     private ArrayList<ArrayList<Integer>> result = new ArrayList<>();
 
-    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root, int target) {
         backtracking(root, target, new ArrayList<>());
         return result;
     }
@@ -417,6 +417,7 @@ public class OfferMain {
     /**********************************************************************************/
     private TreeNode pre = null;
     private TreeNode header = null;
+
     public TreeNode Convert(TreeNode pRootOfTree) {
         inOrder(pRootOfTree);
         return header;
@@ -472,7 +473,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public int MoreThanHalfNum_Solution(int [] array) {
+    public int MoreThanHalfNum_Solution(int[] array) {
         int majority = array[0];
         for (int i = 0, cnt = 1; i < array.length; i++) {
             cnt = (array[i] == majority ? cnt + 1 : cnt - 1);
@@ -524,8 +525,10 @@ public class OfferMain {
         int i = l;
         int j = h + 1;
         while (true) {
-            while (i != h && nums[++i] < p) {}
-            while (j != l && nums[--j] > p) {}
+            while (i != h && nums[++i] < p) {
+            }
+            while (j != l && nums[--j] > p) {
+            }
             if (i > j) {
                 break;
             }
@@ -569,7 +572,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public String PrintMinNumber(int [] numbers) {
+    public String PrintMinNumber(int[] numbers) {
         if (numbers == null || numbers.length == 0) {
             return "";
         }
@@ -632,7 +635,50 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    private long count = 0;
+    private int[] temp;
+
+    public int InversePairs(int[] array) {
+        temp = new int[array.length];
+        mergeSort(array, 0, array.length - 1);
+        return (int) (count % 1000000007);
+    }
+
+    private void mergeSort(int[] array, int low, int high) {
+        if (high - low < 1) {
+            return;
+        }
+        int mid = low + (high - low) / 2;
+        mergeSort(array, low, mid);
+        mergeSort(array, mid + 1, high);
+        merge(array, low, mid, high);
+    }
+
+    private void merge(int[] array, int low, int mid, int high) {
+        int i = low;
+        int j = mid + 1;
+        int k = low;
+
+        while (i <= mid || j <= high) {
+            if (i > mid) {
+                temp[k] = array[j++];
+            } else if (j > high) {
+                temp[k] = array[i++];
+            } else if (array[i] <= array[j]) {
+                temp[k] = array[i++];
+            } else {
+                temp[k] = array[j++];
+                count += mid - i + 1;
+            }
+            k += 1;
+        }
+        if (high + 1 - low >= 0) {
+            System.arraycopy(temp, low, array, low, high + 1 - low);
+        }
+    }
+
+    /**********************************************************************************/
     public static void main(String[] args) {
-        System.out.println(new OfferMain().GetUglyNumber_Solution(7));
+        System.out.println(new OfferMain().InversePairs(new int[]{1, 2, 3, 4, 5, 6, 7, 0}));
     }
 }
