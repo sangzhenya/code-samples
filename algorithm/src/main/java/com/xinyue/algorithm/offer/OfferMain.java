@@ -688,9 +688,103 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    public int GetNumberOfK(int [] array , int k) {
+        int first = binarySearch(array, k);
+        int last = binarySearch(array, k + 1);
+        if (first == array.length || array[first] != k) {
+            return 0;
+        }
+        return last - first;
+    }
+
+    private int binarySearch(int[] nums, int k) {
+        int l = 0;
+        int h = nums.length;
+        while (l < h) {
+            int m = l + (h - l) / 2;
+            if (nums[m] >= k) {
+                h = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        return l;
+    }
+
+    /**********************************************************************************/
+    public int TreeDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return 1 + Math.max(TreeDepth(root.left), TreeDepth(root.right));
+    }
+
+    /**********************************************************************************/
+    private boolean isBalanced = true;
+    public boolean IsBalanced_Solution(TreeNode root) {
+        height(root);
+        return isBalanced;
+    }
+
+    private int height(TreeNode root) {
+        if (root == null || !isBalanced) {
+            return 0;
+        }
+        int left = height(root.left);
+        int right = height(root.right);
+        if (Math.abs(left - right) > 1) {
+            isBalanced = false;
+        }
+        return 1 + Math.max(left, right);
+    }
+
+    /**********************************************************************************/
+    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+        int diff = 0;
+        for (int num : array) {
+            diff ^= num;
+        }
+        diff &= -diff;
+        for (int num : array) {
+            if ((num & diff) == 0) {
+                num1[0] ^= num;
+            } else {
+                num2[0] ^= num;
+            }
+        }
+    }
+
+    /**********************************************************************************/
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        int start = 1;
+        int end = 2;
+        int curSum = 3;
+        while (end < sum) {
+            if (curSum > sum) {
+                curSum -= start;
+                start += 1;
+            } else if (curSum < sum) {
+                end += 1;
+                curSum += end;
+            } else {
+                ArrayList<Integer> tempList = new ArrayList<>();
+                for (int i = start; i <= end; i++) {
+                    tempList.add(i);
+                }
+                result.add(tempList);
+                curSum -= start;
+                start += 1;
+                end += 1;
+                curSum += end;
+            }
+        }
+        return result;
+    }
+
+    /**********************************************************************************/
     public static void main(String[] args) {
-        ListNode listNode = new ListNode(1);
-        listNode.next = new ListNode(2);
-        System.out.println(new OfferMain().FindFirstCommonNode( listNode, null));
+        System.out.println( new OfferMain().FindContinuousSequence(100));
+
     }
 }
