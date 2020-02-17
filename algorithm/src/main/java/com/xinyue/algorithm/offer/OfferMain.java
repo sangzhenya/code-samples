@@ -783,6 +783,71 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        int i = 0;
+        int j = array.length - 1;
+        while (i < j) {
+            int curSum = array[i] + array[j];
+            if (curSum == sum) {
+                return new ArrayList<>(Arrays.asList(array[i], array[j]));
+            } else if (curSum < sum) {
+                i += 1;
+            } else {
+                j -= 1;
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    /**********************************************************************************/
+    public String LeftRotateString(String str,int n) {
+        if (n >= str.length()) {
+            return str;
+        }
+        return str.substring(n) + str.substring(0, n);
+    }
+
+    public String LeftRotateString2(String str,int n) {
+        if (n >= str.length()) {
+            return str;
+        }
+        char[] chars = str.toCharArray();
+        reverse(chars, 0, n - 1);
+        reverse(chars, n, str.length() - 1);
+        reverse(chars, 0, str.length() - 1);
+        return str.substring(n) + str.substring(0, n);
+    }
+
+    private void reverse(char[] arr, int i, int j) {
+        while (i < j) {
+            swapChar(arr, i++, j--);
+        }
+    }
+
+    private void swapChar(char[] arr, int i, int j) {
+        char t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    /**********************************************************************************/
+    public String ReverseSentence(String str) {
+        int n = str.length();
+        char[] chars = str.toCharArray();
+        int i = 0;
+        int j = 0;
+        while (j <= n) {
+            if (j == n || chars[j] == ' ') {
+                reverse(chars, i, j - 1);
+                i = j + 1;
+            }
+            j += 1;
+        }
+        reverse(chars, 0, n - 1);
+        return new String(chars);
+    }
+
+    /**********************************************************************************/
     public static void main(String[] args) {
         System.out.println( new OfferMain().FindContinuousSequence(100));
 
