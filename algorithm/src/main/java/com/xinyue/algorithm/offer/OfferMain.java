@@ -848,6 +848,38 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    public boolean isContinuous(int [] numbers) {
+        if (numbers.length < 5) {
+            return false;
+        }
+        Arrays.sort(numbers);
+        int cnt = 0;
+        for (int number : numbers) {
+            if (number == 0) {
+                cnt += 1;
+            }
+        }
+
+        for (int i = cnt; i < numbers.length - 1; i++) {
+            if (numbers[i] == numbers[i + 1]) {
+                return false;
+            }
+            cnt -= (numbers[i + 1] - numbers[i] - 1);
+        }
+        return cnt >= 0;
+    }
+
+    /**********************************************************************************/
+    public int LastRemaining_Solution(int n, int m) {
+        if (n == 0) {
+            return -1;
+        }
+        if (n == 1) {
+            return 0;
+        }
+        return (LastRemaining_Solution(n - 1, m) + m) % n;
+    }
+    /**********************************************************************************/
     public static void main(String[] args) {
         System.out.println( new OfferMain().FindContinuousSequence(100));
 
