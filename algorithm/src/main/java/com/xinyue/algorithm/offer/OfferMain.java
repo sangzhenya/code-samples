@@ -688,7 +688,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public int GetNumberOfK(int [] array , int k) {
+    public int GetNumberOfK(int[] array, int k) {
         int first = binarySearch(array, k);
         int last = binarySearch(array, k + 1);
         if (first == array.length || array[first] != k) {
@@ -721,6 +721,7 @@ public class OfferMain {
 
     /**********************************************************************************/
     private boolean isBalanced = true;
+
     public boolean IsBalanced_Solution(TreeNode root) {
         height(root);
         return isBalanced;
@@ -739,7 +740,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+    public void FindNumsAppearOnce(int[] array, int num1[], int num2[]) {
         int diff = 0;
         for (int num : array) {
             diff ^= num;
@@ -755,7 +756,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         int start = 1;
         int end = 2;
@@ -783,7 +784,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+    public ArrayList<Integer> FindNumbersWithSum(int[] array, int sum) {
         int i = 0;
         int j = array.length - 1;
         while (i < j) {
@@ -800,14 +801,14 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public String LeftRotateString(String str,int n) {
+    public String LeftRotateString(String str, int n) {
         if (n >= str.length()) {
             return str;
         }
         return str.substring(n) + str.substring(0, n);
     }
 
-    public String LeftRotateString2(String str,int n) {
+    public String LeftRotateString2(String str, int n) {
         if (n >= str.length()) {
             return str;
         }
@@ -848,7 +849,7 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    public boolean isContinuous(int [] numbers) {
+    public boolean isContinuous(int[] numbers) {
         if (numbers.length < 5) {
             return false;
         }
@@ -879,9 +880,102 @@ public class OfferMain {
         }
         return (LastRemaining_Solution(n - 1, m) + m) % n;
     }
+
+    /**********************************************************************************/
+    public int Sum_Solution(int n) {
+        int sum = n;
+        boolean b = (n > 0) && ((sum += Sum_Solution(n - 1)) > 0);
+        return sum;
+    }
+
+    /**********************************************************************************/
+    public int Add(int num1, int num2) {
+        return num2 == 0 ? num1 : Add(num1 ^ num2, (num1 & num2) << 1);
+    }
+
+    /**********************************************************************************/
+    public int StrToInt(String str) {
+        if (str == null || str.length() == 0) {
+            return 0;
+        }
+        boolean withFlag = str.charAt(0) == '-' || str.charAt(0) == '+';
+        boolean isNeg = str.charAt(0) == '-';
+        String substring = str;
+        if (withFlag) {
+            substring = str.substring(1);
+        }
+        if (!isNeg && substring.compareTo("2147483647") > 0) {
+            return 0;
+        } else if (isNeg && substring.compareTo("2147483648") > 0) {
+            return 0;
+        }
+
+        char[] chars = str.toCharArray();
+        int res = 0;
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (i == 0 && (c == '+' || c == '-')) {
+                continue;
+            }
+            if (c < '0' || c > '9') {
+                return 0;
+            }
+            res = res * 10 + (c - '0');
+        }
+        return isNeg ? -res : res;
+    }
+
+    /**********************************************************************************/
+    public int[] multiply(int[] A) {
+        int n = A.length;
+        int[] B = new int[n];
+        for (int i = 0, product = 1; i < n; product *= A[i], i++) {
+            B[i] = product;
+        }
+        for (int i = n - 1, product = 1; i >= 0; product *= A[i], i--) {
+            B[i] *= product;
+        }
+        return B;
+    }
+
+    /**********************************************************************************/
+    public boolean match(char[] str, char[] pattern) {
+        int m = str.length;
+        int n = pattern.length;
+        boolean[][] dp = new boolean[m + 1][n + 1];
+
+        // 状态：dp[i][j] 表示 s 中前 i 个字符与 p 的前 j 个字符组成的表示式是否匹配
+        dp[0][0] = true;
+
+        for (int i = 1; i <= n; i++) {
+            if (pattern[i - 1] == '*') {
+                dp[0][i] = dp[0][i - 2];
+            }
+        }
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (str[i - 1] == pattern[j - 1] || pattern[j - 1] == '.') {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else if (pattern[j - 1] == '*') {
+                    if (pattern[j - 2] == str[i - 1] || pattern[j - 2] == '.') {
+                        dp[i][j] |= dp[i][j - 1];
+                        dp[i][j] |= dp[i - 1][j];
+                        dp[i][j] |= dp[i][j - 2];
+                    } else {
+                        dp[i][j] = dp[i][j - 2];
+                    }
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+
     /**********************************************************************************/
     public static void main(String[] args) {
-        System.out.println( new OfferMain().FindContinuousSequence(100));
+//        System.out.println(Arrays.toString(new OfferMain().multiply(new int[]{1, 2, 3, 4, 5})));
+        System.out.println(new OfferMain().match(new char[]{'a', 'b', 'a'}, new char[]{'a', '.', '*'}));
 
     }
 }
