@@ -973,6 +973,62 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
+    public boolean isNumeric(char[] str) {
+        if (str == null || str.length == 0) {
+            return false;
+        }
+        return new String(str).matches("[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?");
+    }
+
+    /**********************************************************************************/
+    private int[] cns = new int[256];
+    private Queue<Character> queue = new LinkedList<>();
+
+    //Insert one char from stringstream
+    public void Insert(char ch){
+        cns[ch] += 1;
+        queue.add(ch);
+        while (!queue.isEmpty() && cns[queue.peek()] > 1) {
+            queue.poll();
+        }
+    }
+    //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce(){
+        return queue.isEmpty() ? '#' : queue.peek();
+    }
+
+    /**********************************************************************************/
+    public int cutRope(int target) {
+        //动态规划:长度为i的可得最大乘积:dp[i]=dp[j]*dp[i-j]的最大值
+        int[] dp = new int[target + 1];
+        dp[1] = 1;
+        for (int i = 2; i <= target; i++) {
+            for (int j = 1; j < i; j++) {
+                dp[i] = Math.max(dp[i], Math.max(j * (i - j), dp[j] * (i - j)));
+            }
+        }
+        return dp[target];
+    }
+    /**********************************************************************************/
+    public ListNode EntryNodeOfLoop(ListNode pHead) {
+        if (pHead == null || pHead.next == null) {
+            return null;
+        }
+        ListNode slow = pHead;
+        ListNode fast = pHead;
+        do {
+            slow = slow.next;
+            fast = fast.next.next;
+        } while (slow != fast);
+
+        fast = pHead;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+    /**********************************************************************************/
     public static void main(String[] args) {
 //        System.out.println(Arrays.toString(new OfferMain().multiply(new int[]{1, 2, 3, 4, 5})));
         System.out.println(new OfferMain().match(new char[]{'a', 'b', 'a'}, new char[]{'a', '.', '*'}));
