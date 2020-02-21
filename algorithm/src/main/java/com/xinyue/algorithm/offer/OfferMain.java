@@ -1029,9 +1029,268 @@ public class OfferMain {
         return slow;
     }
     /**********************************************************************************/
+    public ListNode deleteDuplication(ListNode pHead) {
+        if (pHead == null || pHead.next == null) {
+            return pHead;
+        }
+        ListNode next = pHead.next;
+        if (pHead.val == next.val) {
+            while (next != null && pHead.val == next.val) {
+                next = next.next;
+            }
+            return deleteDuplication(next);
+        } else {
+            pHead.next = deleteDuplication(pHead.next);
+            return pHead;
+        }
+    }
+
+    /**********************************************************************************/
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        if (pNode.right != null) {
+            TreeLinkNode node = pNode.right;
+            while (node.left != null) {
+                node = node.left;
+            }
+            return node;
+        } else {
+            while (pNode.next != null) {
+                TreeLinkNode parent = pNode.next;
+                if (parent.left == pNode) {
+                    return parent;
+                }
+                pNode = pNode.next;
+            }
+        }
+        return null;
+    }
+
+    /**********************************************************************************/
+    boolean isSymmetrical(TreeNode pRoot) {
+        if (pRoot == null) {
+            return true;
+        }
+        return isSymmetrical(pRoot.left, pRoot.right);
+    }
+
+    private boolean isSymmetrical(TreeNode n1, TreeNode n2) {
+        if (n1 == null && n2 == null) {
+            return true;
+        }
+        if (n1 == null || n2 == null) {
+            return false;
+        }
+        if (n1.val != n2.val) {
+            return false;
+        }
+        return isSymmetrical(n1.left, n2.right) && isSymmetrical(n1.right, n2.left);
+    }
+
+    /**********************************************************************************/
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(pRoot);
+        boolean revese = false;
+        while (!nodeQueue.isEmpty()) {
+            ArrayList<Integer> list = new ArrayList<>();
+            int cnt = nodeQueue.size();
+            while (cnt-- > 0) {
+                TreeNode node = nodeQueue.poll();
+                if (node == null) {
+                    continue;
+                }
+                list.add(node.val);
+                nodeQueue.add(node.left);
+                nodeQueue.add(node.right);
+            }
+            if (revese) {
+                Collections.reverse(list);
+            }
+            revese = !revese;
+            if (list.size() != 0) {
+                result.add(list);
+            }
+        }
+        return result;
+    }
+
+    /**********************************************************************************/
+    ArrayList<ArrayList<Integer> > Print2(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(pRoot);
+        while (!nodeQueue.isEmpty()) {
+            ArrayList<Integer> list = new ArrayList<>();
+            int cnt = nodeQueue.size();
+            while (cnt-- > 0) {
+                TreeNode node = nodeQueue.poll();
+                if (node == null) {
+                    continue;
+                }
+                list.add(node.val);
+                nodeQueue.add(node.left);
+                nodeQueue.add(node.right);
+            }
+            if (list.size() != 0) {
+                result.add(list);
+            }
+        }
+        return result;
+    }
+
+    /**********************************************************************************/
+    private String deserializeStr;
+
+    String Serialize(TreeNode root) {
+        if (root == null) {
+            return "#";
+        }
+        return root.val + " " + Serialize(root.left) + " " + Serialize(root.right);
+    }
+    TreeNode Deserialize(String str) {
+        deserializeStr = str;
+        return Deserialize();
+    }
+
+    private TreeNode Deserialize() {
+        if (deserializeStr.length() == 0) {
+            return null;
+        }
+        int index = deserializeStr.indexOf(" ");
+        String node = index == -1 ? deserializeStr : deserializeStr.substring(0, index);
+        deserializeStr = index == -1 ? "" : deserializeStr.substring(index + 1);
+        if (node.equals("#")) {
+            return null;
+        }
+        TreeNode t = new TreeNode(Integer.parseInt(node));
+        t.left = Deserialize();
+        t.right = Deserialize();
+        return t;
+    }
+
+    /**********************************************************************************/
+    private TreeNode ret;
+    private int cnt = 0;
+    TreeNode KthNode(TreeNode pRoot, int k) {
+        inOrderNew(pRoot, k);
+        return ret;
+    }
+
+    private void inOrderNew(TreeNode pRoot, int k) {
+        if (pRoot == null || cnt >= k) {
+            return;
+        }
+        inOrderNew(pRoot.left, k);
+        cnt += 1;
+        if (cnt == k) {
+            ret = pRoot;
+        }
+        inOrderNew(pRoot.right, k);
+    }
+
+    /**********************************************************************************/
+    private PriorityQueue<Integer> left = new PriorityQueue<>((o1, o2) -> o2 - o1);
+    private PriorityQueue<Integer> right = new PriorityQueue<>();
+    int totalCount = 0;
+    public void Insert(Integer num) {
+        if (totalCount % 2 == 0) {
+            left.add(num);
+            right.add(left.poll());
+        } else {
+            right.add(num);
+            left.add(right.poll());
+        }
+        totalCount += 1;
+
+    }
+
+    public Double GetMedian() {
+        if (totalCount % 2 == 0) {
+            return (left.peek() + right.peek()) / 2.0;
+        } else {
+            return Double.valueOf(right.peek());
+        }
+    }
+
+    /**********************************************************************************/
+    public ArrayList<Integer> maxInWindows(int [] num, int size) {
+        ArrayList<Integer> maxInResult = new ArrayList<>();
+        if (size > num.length || size < 1) {
+            return maxInResult;
+        }
+
+        PriorityQueue<Integer> heap = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        for (int i = 0; i < size; i++) {
+            heap.add(num[i]);
+        }
+        maxInResult.add(heap.peek());
+        for (int i = 0, j = i + size; j < num.length; i++, j++) {
+            heap.remove(num[i]);
+            heap.add(num[j]);
+            maxInResult.add(heap.peek());
+        }
+        return maxInResult;
+    }
+
+    /**********************************************************************************/
+    private static int[][] next = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+    private int rows;
+    private int cols;
+    public boolean hasPath(char[] matrix, int rows, int cols, char[] str) {
+        if (rows == 0 || cols == 0) {
+            return false;
+        }
+        this.rows = rows;
+        this.cols = cols;
+        boolean[][] marked = new boolean[rows][cols];
+        char[][] reMatrix = buildMatrix(matrix);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (backtracking(reMatrix, str, marked, 0, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean backtracking(char[][] matrix, char[] str, boolean[][] marked, int pathLen, int r, int c) {
+        if (pathLen == str.length) {
+            return true;
+        }
+        if (r < 0 || r > rows || c < 0 || c > cols || matrix[r][c] != str[pathLen] || marked[r][c]) {
+            return false;
+        }
+        marked[r][c] = true;
+        for (int[] ints : next) {
+            if (backtracking(matrix, str, marked, pathLen + 1, r + ints[0], c + ints[1])) {
+                return true;
+            }
+        }
+        marked[r][c] = false;
+        return false;
+    }
+
+    private char[][] buildMatrix(char[] array) {
+        char[][] matrix = new char[rows][cols];
+        for (int i = 0, idx = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = array[idx++];
+            }
+        }
+        return matrix;
+    }
+
+    /**********************************************************************************/
     public static void main(String[] args) {
-//        System.out.println(Arrays.toString(new OfferMain().multiply(new int[]{1, 2, 3, 4, 5})));
-        System.out.println(new OfferMain().match(new char[]{'a', 'b', 'a'}, new char[]{'a', '.', '*'}));
+        OfferMain offerMain = new OfferMain();
+        offerMain.Insert(5);
+        offerMain.Insert(2);
+        offerMain.Insert(3);
+        offerMain.Insert(4);
+
+        System.out.println(offerMain.GetMedian());;
 
     }
 }
