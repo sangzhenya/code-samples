@@ -1234,9 +1234,6 @@ public class OfferMain {
     }
 
     /**********************************************************************************/
-    private static int[][] next = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-    private int rows;
-    private int cols;
     public boolean hasPath(char[] matrix, int rows, int cols, char[] str) {
         if (rows == 0 || cols == 0) {
             return false;
@@ -1280,6 +1277,55 @@ public class OfferMain {
             }
         }
         return matrix;
+    }
+
+    /**********************************************************************************/
+    private static int[][] next = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+    private int rows;
+    private int cols;
+    private int mCnt = 0;
+    private int threshold;
+    private int[][] digitSum;
+
+    public int movingCount(int threshold, int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.threshold = threshold;
+        initDigitSum();
+        boolean[][] marked = new boolean[rows][cols];
+        dfs(marked, 0, 0);
+        return mCnt;
+    }
+
+    private void dfs(boolean[][] marked, int r, int c) {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || marked[r][c]) {
+            return;
+        }
+        marked[r][c] = true;
+        if (digitSum[r][c] > this.threshold) {
+            return;
+        }
+        mCnt += 1;
+        for (int[] ints : next) {
+            dfs(marked, r + ints[0], c + ints[1]);
+        }
+    }
+
+    private void initDigitSum() {
+        int[] digitSumOne = new int[Math.max(rows, cols)];
+        for (int i = 0; i < digitSumOne.length; i++) {
+            int n = i;
+            while (n > 0) {
+                digitSumOne[i] += n % 10;
+                n /= 10;
+            }
+        }
+        this.digitSum = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                this.digitSum[i][j] = digitSumOne[i] + digitSumOne[j];
+            }
+        }
     }
 
     /**********************************************************************************/
