@@ -525,10 +525,8 @@ public class OfferMain {
         int i = l;
         int j = h + 1;
         while (true) {
-            while (i != h && nums[++i] < p) {
-            }
-            while (j != l && nums[--j] > p) {
-            }
+            while (i != h && nums[++i] < p) { }
+            while (j != l && nums[--j] > p) { }
             if (i > j) {
                 break;
             }

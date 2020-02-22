@@ -40,6 +40,26 @@ public class Solution {
         return generateSubtrees(1, n);
     }
 
+    private List<TreeNode> generateSubtrees(int s, int e) {
+        List<TreeNode> res = new ArrayList<>();
+        if (s > e) {
+            res.add(null);
+            return res;
+        }
+        for (int i = s; i <= e; i++) {
+            List<TreeNode> leftNodes = generateSubtrees(s, i - 1);
+            List<TreeNode> rightNodes = generateSubtrees(i + 1, e);
+            for (TreeNode leftNode : leftNodes) {
+                for (TreeNode rightNode : rightNodes) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = leftNode;
+                    root.right = rightNode;
+                    res.add(root);
+                }
+            }
+        }
+        return res;
+    }
 
     /******  53. 最大子序和  ******/
     public int maxSubArray(int[] nums) {
@@ -69,31 +89,54 @@ public class Solution {
         }
         return val;
     }
-    /******************************************/
-    private List<TreeNode> generateSubtrees(int s, int e) {
-        List<TreeNode> res = new ArrayList<>();
-        if (s > e) {
-            res.add(null);
-            return res;
-        }
-        for (int i = s; i <= e; i++) {
-            List<TreeNode> leftNodes = generateSubtrees(s, i - 1);
-            List<TreeNode> rightNodes = generateSubtrees(i + 1, e);
-            for (TreeNode leftNode : leftNodes) {
-                for (TreeNode rightNode : rightNodes) {
-                    TreeNode root = new TreeNode(i);
-                    root.left = leftNode;
-                    root.right = rightNode;
-                    res.add(root);
-                }
+
+    /****** 215. 数组中的第K个最大元素 ******/
+    public int findKthLargest(int[] nums, int k) {
+        k = nums.length - k;
+        int l = 0;
+        int h = nums.length - 1;
+        while (l < h) {
+            int j = partition(nums, l, h);
+            if (j == k) {
+                break;
+            } else if (j > k) {
+                h = j - 1;
+            } else {
+                l = j + 1;
             }
         }
-        return res;
+        return nums[k];
+    }
+
+    private int partition(int[] nums, int l, int h) {
+        int p = nums[l];
+        int i = l;
+        int j = h + 1;
+        while (true) {
+            while (i < h && nums[++i] < p) { }
+            while (j > l && nums[--j] > p) { }
+            if (i >= j) {
+                break;
+            }
+            swap(nums, i, j);
+        }
+        swap(nums, l, j);
+        return j;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 
 
     /****************************************************************************************/
     public static void main(String[] args) {
 //        new Solution().diffWaysToCompute()
+        int[] ints = {1, 3, 5, 7, 9, 10, 4, 6, 8, 2};
+        System.out.println(Arrays.toString(ints));
+        new Solution().findKthLargest(ints, 2);
+        System.out.println(Arrays.toString(ints));
     }
 }
