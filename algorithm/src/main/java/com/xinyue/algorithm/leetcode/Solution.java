@@ -130,6 +130,54 @@ public class Solution {
         nums[j] = tmp;
     }
 
+    /****** 70. 爬楼梯 ******/
+    public int climbStairs(int n) {
+        if (n <= 2) {
+            return n;
+        }
+        int pre1 = 2;
+        int pre2 = 1;
+        for (int i = 2; i < n; i++) {
+            int temp = pre1 + pre2;
+            pre2 = pre1;
+            pre1 = temp;
+        }
+        return pre1;
+    }
+
+    /****** 198. 打家劫舍 ******/
+    public int rob(int[] nums) {
+        int pre1 = 0;
+        int pre2 = 0;
+        for (int num : nums) {
+            int cur = Math.max(pre2 + num, pre1);
+            pre2 = pre1;
+            pre1 = cur;
+        }
+        return pre1;
+    }
+
+    /****** 64. 最小路径和 ******/
+    public int minPathSum(int[][] grid) {
+        if (grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int[] dp = new int[cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (j == 0) {
+                } else if (i == 0) {
+                    dp[j] = dp[j - 1];
+                } else {
+                    dp[j] = Math.min(dp[j - 1], dp[j]);
+                }
+                dp[j] += grid[i][j];
+            }
+        }
+        return dp[cols - 1];
+    }
 
     /****************************************************************************************/
     public static void main(String[] args) {
