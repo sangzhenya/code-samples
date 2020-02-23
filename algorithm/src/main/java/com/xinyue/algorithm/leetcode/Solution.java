@@ -179,12 +179,93 @@ public class Solution {
         return dp[cols - 1];
     }
 
+    /****** 413. 等差数列划分 ******/
+    public int numberOfArithmeticSlices(int[] A) {
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        int n = A.length;
+        int[] dp = new int[n];
+        for (int i = 2; i < n; i++) {
+            if (A[i] - A[i - 1] == A[i - 1] - A[i - 2]) {
+                dp[i] = dp[i - 1] + 1;
+            }
+        }
+        int total = 0;
+        for (int cnt : dp) {
+            total += cnt;
+        }
+        return total;
+    }
+    /****** 343. 整数拆分 ******/
+    public int integerBreak(int n) {
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j < i; j++) {
+                dp[i] = Math.max(dp[i], Math.max(j * dp[i - j], j * (i - j)));
+            }
+        }
+        System.out.println(Arrays.toString(dp));
+        return dp[n];
+    }
+
+    /****** 279. 完全平方数 ******/
+    public int numSquares(int n) {
+        List<Integer> sList = generateSquareList(n);
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int min = Integer.MAX_VALUE;
+            for (Integer sq : sList) {
+                if (sq > i) {
+                    break;
+                }
+                min = Math.min(min, dp[i - sq] + 1);
+            }
+            dp[i] = min;
+        }
+        return dp[n];
+    }
+
+    /****** 91. 解码方法 ******/
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;
+        for (int i = 2; i <= n; i++) {
+            int one = Integer.parseInt(s.substring(i - 1, i));
+            if (one != 0) {
+                dp[i] += dp[i - 1];
+            }
+            if (s.charAt(i - 2) == '0') {
+                continue;
+            }
+            int two = Integer.parseInt(s.substring(i - 2, i));
+            if (two <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[n];
+    }
+
+    private List<Integer> generateSquareList(int n) {
+        List<Integer> sList = new ArrayList<>();
+        int diff = 3;
+        int sq = 1;
+        while (sq <= n) {
+            sList.add(sq);
+            sq += diff;
+            diff += 2;
+        }
+        return sList;
+    }
+
     /****************************************************************************************/
     public static void main(String[] args) {
-//        new Solution().diffWaysToCompute()
-        int[] ints = {1, 3, 5, 7, 9, 10, 4, 6, 8, 2};
-        System.out.println(Arrays.toString(ints));
-        new Solution().findKthLargest(ints, 2);
-        System.out.println(Arrays.toString(ints));
+        System.out.println(new Solution().numSquares(13));
     }
 }
